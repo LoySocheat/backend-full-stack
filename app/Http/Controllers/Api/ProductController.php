@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
@@ -34,24 +32,31 @@ class ProductController extends Controller
             'ram' => 'required|string',
             'storage' => 'required|string',
             'images' => 'array',
-            'images.*.image_path' => 'required|string|url',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-
+    
         // Create the product
         $product = Product::create($request->only(['name', 'price', 'brand', 'processor', 'ram', 'storage']));
-
+    
         // Attach images to the product
         if ($request->has('images')) {
-            foreach ($request->input('images') as $imageData) {
-                $image = new ProductImage(['image_path' => $imageData['image_path']]);
+            foreach ($request->file('images') as $imageFile) {
+                $imagePath = $imageFile->store('public/product_images');
+                
+                // Remove 'public/' from the beginning of the path
+                $imagePath = str_replace('public/', '', $imagePath);
+    
+                $image = new ProductImage(['image_path' => $imagePath]);
                 $product->images()->save($image);
             }
         }
-
+    
         $product->load('images'); // Load the created images
-
+    
         return response()->json(['message' => 'Product and images created successfully', 'product' => $product]);
     }
+    
+    
 
     /**
      * Display the specified resource.
@@ -85,15 +90,20 @@ class ProductController extends Controller
             'processor' => 'string',
             'ram' => 'string',
             'storage' => 'string',
-            'new_image_path' => 'string|url',
+            'new_image_path' => 'array',
+            'new_image_path.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
     
         $product->update($request->only(['name', 'price', 'brand', 'processor', 'ram', 'storage']));
     
 
         if ($request->has('new_image_path')) {
-            $newImage = new ProductImage(['image_path' => $request->input('new_image_path')]);
-            $product->images()->save($newImage);
+            foreach ($request->file('new_image_path') as $imageFile) {
+                $imagePath = $imageFile->store('public/product_images');
+                $imagePath = str_replace('public/', '', $imagePath);
+                $image = new ProductImage(['image_path' => $imagePath]);
+                $product->images()->save($image);
+            }
         }
     
         $product->load('images');
@@ -140,6 +150,11 @@ class ProductController extends Controller
         $image->delete();
 
         return response()->json(['message' => 'Image deleted successfully']);
+    }
+    
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class);
     }
     
 }

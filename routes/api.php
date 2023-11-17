@@ -32,7 +32,7 @@ Route::post('/login',[AuthController::class,'login']);
 
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
-Route::put('/products/{id}', [ProductController::class, 'update']);
+Route::post('/products/{id}', [ProductController::class, 'update']);
 Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 Route::delete('/products/{productId}/images/{imageId}', [ProductController::class, 'deleteImage']);
 Route::post('/products', [ProductController::class, 'store']);
