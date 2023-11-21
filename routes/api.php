@@ -24,15 +24,13 @@ Route::middleware('auth:sanctum')->group(function() {
     });
     Route::post('/logout',[AuthController::class,'logout']);
     Route::apiResource('/users', UserController::class);
-
+    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+    Route::delete('/products/{productId}/images/{imageId}', [ProductController::class, 'deleteImage']);
+    Route::post('/products', [ProductController::class, 'store']);
 });
 
+Route::post('/products/{id}', [ProductController::class, 'update']);
 Route::post('/signup',[AuthController::class,'signup']);
 Route::post('/login',[AuthController::class,'login']);
-
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
-Route::post('/products/{id}', [ProductController::class, 'update']);
-Route::delete('/products/{id}', [ProductController::class, 'destroy']);
-Route::delete('/products/{productId}/images/{imageId}', [ProductController::class, 'deleteImage']);
-Route::post('/products', [ProductController::class, 'store']);
