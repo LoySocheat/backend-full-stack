@@ -14,10 +14,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('images')->get();
-
+        $products = Product::with('images')->orderBy('id', 'desc')->paginate(10);
+    
         return response()->json(['products' => $products]);
     }
+    
 
     /**
      * Store a newly created resource in storage.
