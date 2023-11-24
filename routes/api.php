@@ -6,7 +6,6 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\LaptopController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\ImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,10 +34,6 @@ Route::post('/signup',[AuthController::class,'signup']);
 Route::post('/login',[AuthController::class,'login']);
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
-
-// image
-Route::get('/images', [ImageController::class, 'index']);
-Route::post('/update-image-order', [ImageController::class, 'updateOrder']);
 
 // laptop
 Route::post('/laptops',[LaptopController::class, 'store']);
