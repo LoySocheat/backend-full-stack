@@ -3,9 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\LaptopController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
-use App\Models\Product;
+use App\Http\Controllers\ImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,3 +35,14 @@ Route::post('/signup',[AuthController::class,'signup']);
 Route::post('/login',[AuthController::class,'login']);
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
+
+// image
+Route::get('/images', [ImageController::class, 'index']);
+Route::post('/update-image-order', [ImageController::class, 'updateOrder']);
+
+// laptop
+Route::post('/laptops',[LaptopController::class, 'store']);
+Route::get('/laptops',[LaptopController::class, 'index']);
+Route::get('/laptops/{id}', [LaptopController::class, 'show']);
+Route::post('/laptops/{id}', [LaptopController::class, 'update']);
+Route::post('/update-image', [LaptopController::class, 'updateImageOrder']);
