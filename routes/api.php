@@ -41,3 +41,5 @@ Route::get('/laptops',[LaptopController::class, 'index']);
 Route::get('/laptops/{id}', [LaptopController::class, 'show']);
 Route::post('/laptops/{id}', [LaptopController::class, 'update']);
 Route::post('/update-image', [LaptopController::class, 'updateImageOrder']);
+Route::delete('/laptops/{id}',[LaptopController::class, 'destroy']);
+Route::delete('/laptops/{laptopId}/images/{imageId}', [LaptopController::class, 'deleteLaptopImage']);

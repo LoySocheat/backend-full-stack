@@ -131,7 +131,39 @@ class LaptopController extends Controller
 
     public function destroy($id)
     {
+        $laptop = Laptop::find($id);
 
+        if (!$laptop) {
+            return response()->json(['message' => 'Laptop not found'], 404);
+        }
+
+        // Delete associated images
+        $laptop->images()->delete();
+    
+        // Delete the laptop
+        $laptop->delete();
+    
+        return response()->json(['message' => 'Laptop and associated images deleted successfully']);
+    }
+
+    public function deleteLaptopImage($laptopId, $imageId)
+    {
+        $laptop = Laptop::find($laptopId);
+
+        if (!$laptop) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
+        $image = $laptop->images()->find($imageId);
+
+        if (!$image) {
+            return response()->json(['message' => 'Image not found for the laptop$laptop'], 404);
+        }
+
+        // Delete the image
+        $image->delete();
+
+        return response()->json(['message' => 'Image deleted successfully']);
     }
 
     public function images()
